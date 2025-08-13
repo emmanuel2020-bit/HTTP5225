@@ -15,10 +15,10 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
                 <h5 class="card-title">Student Information</h5>
                 <dl class="row">
                     <dt class="col-sm-4">First Name:</dt>
@@ -30,6 +30,28 @@
                     <dt class="col-sm-4">Email:</dt>
                     <dd class="col-sm-8">{{ $student->email }}</dd>
                 </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Enrolled Courses</h5>
+                @if($student->courses->count() > 0)
+                    <ul class="list-group list-group-flush">
+                        @foreach($student->courses as $course)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ $course->name }}
+                                <a href="{{ route('courses.show', $course) }}" class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-muted mb-0">No courses enrolled yet.</p>
+                @endif
             </div>
         </div>
     </div>

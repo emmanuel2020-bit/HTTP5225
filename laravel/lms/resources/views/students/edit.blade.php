@@ -31,6 +31,23 @@
                 <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $student->email) }}" required>
             </div>
             
+            <div class="mb-3">
+                <label class="form-label">Select Courses:</label>
+                <div class="row">
+                    @foreach ($courses as $course)
+                    <div class="col-md-6 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="courses[]" value="{{ $course->id }}" id="course_{{ $course->id }}"
+                                {{ in_array($course->id, $student->courses->pluck('id')->toArray()) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="course_{{ $course->id }}">
+                                {{ $course->name }}
+                            </label>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            
             @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
                     <ul class="mb-0">

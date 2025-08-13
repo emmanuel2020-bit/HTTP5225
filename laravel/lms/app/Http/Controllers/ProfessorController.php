@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Professor;
 use Illuminate\Http\Request;
 
 class ProfessorController extends Controller
@@ -11,7 +12,8 @@ class ProfessorController extends Controller
      */
     public function index()
     {
-        //
+        $professors = Professor::with('course')->get();
+        return view('professors.index', compact('professors'));
     }
 
     /**
@@ -19,7 +21,7 @@ class ProfessorController extends Controller
      */
     public function create()
     {
-        //
+        return view('professors.create');
     }
 
     /**
@@ -27,38 +29,55 @@ class ProfessorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:professors',
+            'department' => 'required|string|max:255',
+        ]);
+
+        Professor::create($request->all());
+        
+        return redirect()->route('professors.index')->with('success', 'Professor added successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Professor $professor)
     {
-        //
+        return view('professors.show', compact('professor'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Professor $professor)
     {
-        //
+        return view('professors.edit', compact('professor'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Professor $professor)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:professors,email,' . $professor->id,
+            'department' => 'required|string|max:255',
+        ]);
+
+        $professor->update($request->all());
+        
+        return redirect()->route('professors.index')->with('success', 'Professor updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Professor $professor)
     {
-        //
+        $professor->delete();
+        return redirect()->route('professors.index')->with('success', 'Professor deleted successfully!');
     }
 }

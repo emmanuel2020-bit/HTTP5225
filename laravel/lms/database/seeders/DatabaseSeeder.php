@@ -1,11 +1,7 @@
 <?php
+
 namespace Database\Seeders;
 
-use App\Models\student;
-use App\Models\User;
-use App\Models\Course;
-use App\Models\Professor;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,15 +11,66 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create sample professors
+        $professor1 = \App\Models\Professor::create([
+            'name' => 'Dr. John Smith',
+            'email' => 'john.smith@university.edu',
+            'department' => 'Computer Science'
+        ]);
 
-    //     User::factory()->create([
-    //         'name' => 'Test User',
-    //         'email' => 'test@example.com',
-    //     ]);
-    
-    // student::factory(100)->create();
-    Professor::factory(100)->create();
-    Course::factory(100)->create();
+        $professor2 = \App\Models\Professor::create([
+            'name' => 'Dr. Sarah Johnson',
+            'email' => 'sarah.johnson@university.edu',
+            'department' => 'Mathematics'
+        ]);
+
+        $professor3 = \App\Models\Professor::create([
+            'name' => 'Dr. Michael Brown',
+            'email' => 'michael.brown@university.edu',
+            'department' => 'Physics'
+        ]);
+
+        // Create sample courses
+        $course1 = \App\Models\Course::create([
+            'name' => 'Introduction to Programming',
+            'description' => 'Learn the basics of programming with Python',
+            'professor_id' => $professor1->id
+        ]);
+
+        $course2 = \App\Models\Course::create([
+            'name' => 'Calculus I',
+            'description' => 'Fundamental concepts of calculus',
+            'professor_id' => $professor2->id
+        ]);
+
+        $course3 = \App\Models\Course::create([
+            'name' => 'Quantum Mechanics',
+            'description' => 'Introduction to quantum physics',
+            'professor_id' => $professor3->id
+        ]);
+
+        // Create sample students
+        $student1 = \App\Models\Student::create([
+            'fname' => 'Alice',
+            'lname' => 'Wilson',
+            'email' => 'alice.wilson@student.edu'
+        ]);
+
+        $student2 = \App\Models\Student::create([
+            'fname' => 'Bob',
+            'lname' => 'Davis',
+            'email' => 'bob.davis@student.edu'
+        ]);
+
+        $student3 = \App\Models\Student::create([
+            'fname' => 'Carol',
+            'lname' => 'Miller',
+            'email' => 'carol.miller@student.edu'
+        ]);
+
+        // Enroll students in courses
+        $student1->courses()->attach([$course1->id, $course2->id]);
+        $student2->courses()->attach([$course1->id, $course3->id]);
+        $student3->courses()->attach([$course2->id, $course3->id]);
     }
 }

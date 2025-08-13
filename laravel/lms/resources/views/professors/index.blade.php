@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'All Students')
+@section('title', 'All Professors')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h2">All Students</h1>
+    <h1 class="h2">All Professors</h1>
     <div>
-        <a href="{{ route('students.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add New Student
+        <a href="{{ route('professors.create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New Professor
         </a>
         <a href="{{ route('courses.index') }}" class="btn btn-info">
             <i class="bi bi-book"></i> View Courses
@@ -15,7 +15,7 @@
     </div>
 </div>
 
-@if($students->count() > 0) 
+@if($professors->count() > 0) 
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -24,38 +24,36 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Enrolled Courses</th>
+                        <th>Department</th>
+                        <th>Teaching Course</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($students as $student)
+                    @foreach ($professors as $professor)
                         <tr>
-                            <td>{{ $student->fname }} {{ $student->lname }}</td>
-                            <td>{{ $student->email }}</td>
+                            <td>{{ $professor->name }}</td>
+                            <td>{{ $professor->email }}</td>
+                            <td>{{ $professor->department }}</td>
                             <td>
-                                @if($student->courses->count() > 0)
-                                    <div class="d-flex flex-wrap gap-1">
-                                        @foreach($student->courses as $course)
-                                            <span class="badge bg-primary">{{ $course->name }}</span>
-                                        @endforeach
-                                    </div>
+                                @if($professor->course)
+                                    <span class="badge bg-success">{{ $professor->course->name }}</span>
                                 @else
-                                    <span class="text-muted">No courses</span>
+                                    <span class="text-muted">No course assigned</span>
                                 @endif
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ route('professors.edit', $professor) }}" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-pencil"></i> Edit
                                     </a>
-                                    <a href="{{ route('students.show', $student->id) }}" class="btn btn-sm btn-outline-info">
+                                    <a href="{{ route('professors.show', $professor) }}" class="btn btn-sm btn-outline-info">
                                         <i class="bi bi-eye"></i> View
                                     </a>
-                                    <form method="POST" action="{{ route('students.destroy', $student->id) }}" class="d-inline">
+                                    <form method="POST" action="{{ route('professors.destroy', $professor) }}" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this student?')">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this professor?')">
                                             <i class="bi bi-trash"></i> Delete
                                         </button>
                                     </form>
@@ -70,7 +68,7 @@
 </div>
 @else
 <div class="alert alert-info" role="alert">
-    <i class="bi bi-info-circle"></i> No students found.
+    <i class="bi bi-info-circle"></i> No professors found.
 </div>
 @endif
 @endsection 

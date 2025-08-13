@@ -24,6 +24,8 @@
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Professor</th>
+                        <th>Enrolled Students</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -32,6 +34,16 @@
                         <tr>
                             <td>{{ $course->name }}</td>
                             <td>{{ Str::limit($course->description, 100) }}</td>
+                            <td>
+                                @if($course->professor)
+                                    <span class="badge bg-info">{{ $course->professor->name }}</span>
+                                @else
+                                    <span class="text-muted">No professor</span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">{{ $course->students->count() }} students</span>
+                            </td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{ route('courses.edit', $course) }}" class="btn btn-sm btn-outline-primary">

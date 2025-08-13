@@ -17,12 +17,24 @@
             
             <div class="mb-3">
                 <label for="name" class="form-label">Name:</label>
-                <input type="text" name="name" id="name" class="form-control" required>
+                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
             </div>
             
             <div class="mb-3">
                 <label for="description" class="form-label">Description:</label>
-                <textarea name="description" id="description" class="form-control" rows="4" required></textarea>
+                <textarea name="description" id="description" class="form-control" rows="4" value="{{ old('description') }}" required></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="professor_id" class="form-label">Professor:</label>
+                <select name="professor_id" id="professor_id" class="form-select" required>
+                    <option value="">Select a Professor</option>
+                    @foreach ($professors as $professor)
+                        <option value="{{ $professor->id }}" {{ old('professor_id') == $professor->id ? 'selected' : '' }}>
+                            {{ $professor->name }} - {{ $professor->department }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             
             @if ($errors->any())

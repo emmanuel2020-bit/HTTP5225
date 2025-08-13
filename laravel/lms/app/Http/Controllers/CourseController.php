@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\Professor;
 
 class CourseController extends Controller
 {
@@ -12,7 +13,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::with('professor')->get();
         return view('courses.index', compact('courses'));
     }
 
@@ -21,7 +22,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('courses.create');
+        $professors = Professor::all();
+        return view('courses.create', compact('professors'));
     }
 
     /**
@@ -29,10 +31,18 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'professor_id' => 'required|exists:professors,id',
+        ]);
+
         $course = new Course();
         $course->name = $request->name;
         $course->description = $request->description;
+        $course->professor_id = $request->professor_id;
         $course->save();
+        
         return redirect()->route('courses.index')->with('success', 'Course added successfully!');
     }
 
@@ -49,7 +59,8 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('courses.edit', compact('course'));
+        $professors = Professor::all();
+        return view('courses.edit', compact('course', 'professors'));
     }
 
     /**
@@ -57,9 +68,17 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'professor_id' => 'required|exists:professors,id',
+        ]);
+
         $course->name = $request->name;
         $course->description = $request->description;
+        $course->professor_id = $request->professor_id;
         $course->save();
+        
         return redirect()->route('courses.index')->with('success', 'Course updated successfully!');
    }
 

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('professors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('department');
-            $table->timestamps();
+        Schema::table('courses', function (Blueprint $table) {
+            $table->foreign('professor_id')->references('id')->on('professors')->onDelete('cascade');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('professors');
+        Schema::table('courses', function (Blueprint $table) {
+            $table->dropForeign(['professor_id']);
+        });
     }
-};
+}; 
